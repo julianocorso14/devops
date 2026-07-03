@@ -6,6 +6,7 @@ from datetime import datetime
 class Tarefa(BaseModel):
     titulo: str
     descricao: str
+    concluido: bool = False
 
 LISTA_TAREFAS = []
 APP = FastAPI()
@@ -50,7 +51,6 @@ def listar_tarefa_especifica(id: int):
     
     return mensagem_padrao
 
-# Implementar!
 @APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa", tags=["Tarefas"])
 def inserir_tarefa(tarefa: Tarefa):
     mensagem_padrao = {"mensagem": "OK"}
@@ -67,6 +67,7 @@ def atualizar_tarefa(id: int, tarefa: Tarefa):
     
     LISTA_TAREFAS[id]["titulo"] = tarefa.titulo
     LISTA_TAREFAS[id]["descricao"] = tarefa.descricao
+    LISTA_TAREFAS[id]["concluido"] = tarefa.concluido
     return mensagem_padrao
 
 
