@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from datetime import datetime
+import requests
 
 
 class Tarefa(BaseModel):
@@ -68,6 +69,9 @@ def atualizar_tarefa(id: int, tarefa: Tarefa):
     LISTA_TAREFAS[id]["titulo"] = tarefa.titulo
     LISTA_TAREFAS[id]["descricao"] = tarefa.descricao
     LISTA_TAREFAS[id]["concluido"] = tarefa.concluido
+    if tarefa.concluido == True:
+        requests.post(f"http://localhost:8001/notificar/?titulo{tarefa.titulo}&data{datetime.now()}")
+
     return mensagem_padrao
 
 
