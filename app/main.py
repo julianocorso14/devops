@@ -52,7 +52,7 @@ def listar_tarefa_especifica(id: int):
     
     return mensagem_padrao
 
-@APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa", tags=["Tarefas"])
+@APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa", tags=["Tarefas"], status_code=201)
 def inserir_tarefa(tarefa: Tarefa):
     mensagem_padrao = {"mensagem": "OK"}
     novo_id = len(LISTA_TAREFAS)
