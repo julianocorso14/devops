@@ -12,5 +12,5 @@ APP_NOTIFICACAO = FastAPI()
 @APP_NOTIFICACAO.post("/notificar")
 def inserir_notificacao(titulo: str, data: datetime):
     mensagem_padrao = {"mensagem": f"A tarefa {titulo} foi concluida em: {data}"}
-    print(f"{titulo} - {data}" )
+    print(mensagem_padrao)
     return mensagem_padrao
