@@ -9,6 +9,12 @@ def test_index():
     assert requisicao.status_code == 200
     assert requisicao.json() == "Olá, DevOps!"
 
+def test_health():
+    requisicao = CLIENT.get("/health")
+
+    assert requisicao.status_code == 200
+    assert requisicao.json() == {"status": "OK"}
+
 def test_inserir_tarefa():
     tarefa = {
         "titulo": "str",
