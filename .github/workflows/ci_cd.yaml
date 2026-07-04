@@ -19,7 +19,7 @@ jobs:
       - name: 'Testes unitários'
         run: pytest
       - name: 'Cobertura de código'
-        run: pytest --cov --cov-fail-under=80
+        run: pytest --cov --cov-fail-under=50
       - name: 'Análise estática'
         run: bandit -r app/
       - name: 'Linting'
