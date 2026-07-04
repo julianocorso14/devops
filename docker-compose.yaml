@@ -1,0 +1,16 @@
+services:
+  tarefas:
+    build:
+      context: .
+    command: "-e main:APP"
+  notificacoes:
+    build:
+      context: .
+    command: "-e notificacao:APP_NOTIFICACAO"
+  gateway:
+    build:
+      dockerfile: Dockerfile.nginx
+      context: .
+    ports:
+      - "80:8002"
+    

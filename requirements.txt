@@ -4,3 +4,4 @@ httpx2
 pytest-cov
 bandit
 pylint
+requests
