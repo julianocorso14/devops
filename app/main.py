@@ -70,7 +70,7 @@ def atualizar_tarefa(id: int, tarefa: Tarefa):
     LISTA_TAREFAS[id]["descricao"] = tarefa.descricao
     LISTA_TAREFAS[id]["concluido"] = tarefa.concluido
     if tarefa.concluido == True:
-        requests.post(f"http://localhost:8002/notificar?titulo{tarefa.titulo}&data{datetime.now()}" timeout=100)
+        requests.post(f"http://localhost:8002/notificar?titulo{tarefa.titulo}&data{datetime.now()}", timeout=100)
 
     return mensagem_padrao
 
