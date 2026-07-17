@@ -44,3 +44,11 @@ jobs:
         with:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/curso-devops:latest
+  implantacao:
+    runs-on: self-hosted
+    needs: entrega
+    name: 'Implantação'
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Aplicação do manifesto'
+        run: kubectl delete -f deployment.yaml && kubectl apply -f deployment.yaml

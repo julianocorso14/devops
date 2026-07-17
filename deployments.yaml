@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-svc
+spec:
+  type: NodePort
+  selector:
+    app: devops
+  ports:
+    - name: api
+      targetPort: 8000
+      port: 8000
+      nodePort: 30005
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-devops
+  labels:
+    app: devops
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: devops
+  template:
+    metadata:
+      labels:
+        app: devops
+    spec:
+      containers:
+        - name: api
+          image: julianocorso14/curso-devops:latest
+          ports:
+            - containerPort: 8000
+          
+# Implantar notificacao da aplicacao (notificacao.py)
+#   Criar um deployment (deploy-notificacao)
+#   Criar um servico (svc-notificacao)
+#   Dentro da aplicacao (deploy-devops) voce deve alcancar a aplicacao de notificacao (deploy-notificacao)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-notificacao-svc
+spec:
+  type: NodePort
+  selector:
+    app: devops-notificacao
+  ports:
+    - name: api-notificacao
+      targetPort: 8000
+      port: 8000
+      nodePort: 30006
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-notificacao
+  labels:
+    app: devops-notificacao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-notificacao
+  template:
+    metadata:
+      labels:
+        app: devops-notificacao
+    spec:
+      containers:
+        - name: api-notificacao
+          image: julianocorso14/curso-devops:latest
+          args: ["-e", "notificacao:APP_NOTIFICACAO"]
+          ports:
+            - containerPort: 8000
+
