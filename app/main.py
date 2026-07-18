@@ -108,7 +108,7 @@ def atualizar_tarefa(id: int, tarefa: Tarefa):
     if tarefa.concluido:
         qtd_tarefas_concluida += 1
         qtd_tarefas_pendentes -= 1
-        requests.post(f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&data_finalizacao={datetime.now()}", timeout=100)
+        # requests.post(f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&data_finalizacao={datetime.now()}", timeout=100)
     
     return mensagem_padrao
 
