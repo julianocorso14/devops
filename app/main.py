@@ -86,7 +86,7 @@ def listar_tarefas():
     return [{"id": tarefa["id"], "titulo": tarefa["titulo"]} for tarefa in LISTA_TAREFAS]
 
 
-@APP.get("/tarefas/{tarefa_id}", summary="Listar tarefa específica", 
+@APP.get("/tarefas/{tarefa_id}", summary="Listar tarefa específica",
 description="Lista uma tarefa pelo ID", tags=["Tarefas"])
 def listar_tarefa_especifica(tarefa_id: int):
     """Lista uma tarefa específica pelo ID."""
@@ -97,7 +97,7 @@ def listar_tarefa_especifica(tarefa_id: int):
     return LISTA_TAREFAS[tarefa_id]
 
 
-@APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa", 
+@APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa",
 tags=["Tarefas"], status_code=201)
 def inserir_tarefa(tarefa: Tarefa):
     """Insere uma nova tarefa na lista."""
@@ -110,7 +110,7 @@ def inserir_tarefa(tarefa: Tarefa):
     return {"mensagem": "OK"}
 
 
-@APP.put("/tarefas/{tarefa_id}", summary="Atualizar tarefa", 
+@APP.put("/tarefas/{tarefa_id}", summary="Atualizar tarefa",
 description="Atualiza uma tarefa pelo ID", tags=["Tarefas"])
 def atualizar_tarefa(tarefa_id: int, tarefa: Tarefa):
     """Atualiza uma tarefa existente."""
@@ -140,7 +140,7 @@ def atualizar_tarefa(tarefa_id: int, tarefa: Tarefa):
     return {"mensagem": "OK"}
 
 
-@APP.delete("/tarefas/{tarefa_id}", summary="Deletar tarefa", 
+@APP.delete("/tarefas/{tarefa_id}", summary="Deletar tarefa",
 description="Deleta uma tarefa pelo ID", tags=["Tarefas"])
 def deletar_tarefa(tarefa_id: int):
     """Remove uma tarefa da lista."""
@@ -155,7 +155,7 @@ def deletar_tarefa(tarefa_id: int):
     return {"mensagem": "OK"}
 
 
-@APP.get("/metricas", summary="Metricas", description="Retorna métricas de tarefas", 
+@APP.get("/metricas", summary="Metricas", description="Retorna métricas de tarefas",
 tags=["Tarefas"], response_model=Metricas)
 def metricas():
     """Retorna métricas das tarefas cadastradas."""
