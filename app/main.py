@@ -29,17 +29,21 @@ class Metricas(BaseModel):
     qtd_tarefas_concluida: int
     qtd_tarefas_atualizadas: int
     qtd_tarefas_removidas: int
+    tempo_medio: float
 
 LISTA_TAREFAS = []
-qtd_tarefas: int
-qtd_tarefas_pendentes: int
-qtd_tarefas_concluida: int
-qtd_tarefas_atualizadas: int
-qtd_tarefas_removidas: int
+qtd_tarefas: int = 0
+qtd_tarefas_pendentes: int = 0
+qtd_tarefas_concluida: int = 0
+qtd_tarefas_atualizadas: int = 0
+qtd_tarefas_removidas: int = 0
+tempo_medio: int = 0
+
 APP = FastAPI()
 
 def nova_tarefa(id: int, titulo: str, descricao: str):
     """Função auxiliar para criar uma tarefa usando dicionário (`dict`)"""
+
     return {
         "id": id,
         "titulo": titulo,
@@ -50,7 +54,7 @@ def nova_tarefa(id: int, titulo: str, descricao: str):
 
 @APP.get("/", summary="Página inicial", description="Página inicial da API", tags=["Home"])
 def index():
-    LOGGER.info("Acesso a Home Page")
+    LOGGER.info("Acesso a HomePage")
     return "Olá, DevOps!"
 
 @APP.get("/health", summary="Health", description="Retorna Health da API", tags=["Health"])
@@ -102,6 +106,7 @@ def inserir_tarefa(tarefa: Tarefa):
     LOGGER.debug(str(nova))
     LISTA_TAREFAS.append(nova)
     LOGGER.info(f"Nova tarefa inserida com sucesso, {str(mensagem_padrao)}")
+    qtd_tarefas += 1 
     return mensagem_padrao
 
 @APP.put("/tarefas/{id}", summary="Atualizar tarefa", description="Atualiza uma tarefa específica pelo ID", tags=["Tarefas"])
@@ -116,6 +121,8 @@ def atualizar_tarefa(id: int, tarefa: Tarefa):
     LISTA_TAREFAS[id]["concluido"] = tarefa.concluido
     if tarefa.concluido == True:
         LOGGER.info("Tarefa concluida, enviando notificação")
+        qtd_tarefas_concluida += 1
+        qtd_tarefas_pendentes -= 1
         requests.post(f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&data_finalizacao={datetime.now()}", timeout=100)
     LOGGER.info(str(mensagem_padrao))
     return mensagem_padrao
@@ -130,9 +137,25 @@ def deletar_tarefa(id: int):
     
     LOGGER.debug(f"Apagando a tarefa: {id}, {str(LISTA_TAREFAS[id])}")
     LISTA_TAREFAS.pop(id)
+    qtd_tarefas_removidas += 1
     LOGGER.info("Tarefa deletada com sucesso")
     return mensagem_padrao
 
-@APP.get('/metricas', response_model=Tarefa)
+@APP.get('/metricas', summary="Metricas", description="Retona metricas de tarefas", tags=["Tarefas"],
+response_model=Metricas)
 def metricas():
-    pass
+    tempo_medio_total = 0
+    metricas = Metricas()
+    metricas.qtd_tarefas = len(LISTA_TAREFAS)
+    metricas.qtd_tarefas_pendentes = qtd_tarefas_pendentes
+    metricas.qtd_tarefas_concluida = qtd_tarefas_concluida
+    metricas.qtd_tarefas_atualizadas = qtd_tarefas_atualizadas
+    metricas.qtd_tarefas_removidas = qtd_tarefas_removidas
+    if tempo_medio == 0:
+        metricas.tempo_medio = 0
+    else:
+        metricas.tempo_medio = tempo_medio_total / len(LISTA_TAREFAS)
+    LOGGER.info("Retornando metricas")
+    LOGGER.debug(str(metricas))
+
+    return metricas
