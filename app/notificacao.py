@@ -1,3 +1,5 @@
+"""Módulo de notificações da aplicação."""
+
 from datetime import datetime
 from fastapi import FastAPI
 
