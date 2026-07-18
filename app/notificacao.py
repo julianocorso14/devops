@@ -1,15 +1,10 @@
-from fastapi import FastAPI
 from datetime import datetime
+from fastapi import FastAPI
 
 APP_NOTIFICACAO = FastAPI()
 
-# Criar uma rota para receber tarefa finalizada
-# APP_NOTIFICACAO.post("/notificar")
-# Entrada:
-#   - Recebe título da tarefa e data de finalização da tarefa
-# Saída:
-#   - print no terminal
+
 @APP_NOTIFICACAO.post("/notificar")
 def inserir_notificacao(titulo: str, data: datetime):
-    mensagem_padrao = {"mensagem": f"A tarefa {titulo} foi concluida em: {data}"}
-    return mensagem_padrao
+    """Endpoint para registrar notificação de conclusão de tarefa."""
+    return {"mensagem": f"A tarefa {titulo} foi concluída em: {data}"}
