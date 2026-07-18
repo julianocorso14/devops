@@ -130,8 +130,8 @@ def atualizar_tarefa(tarefa_id: int, tarefa: Tarefa):
         QTD_TAREFAS_PENDENTES -= 1
         try:
             requests.post(
-                f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&
-                data_finalizacao={datetime.now()}",
+                f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&"
+                f"data_finalizacao={datetime.now()}",
                 timeout=5
             )
         except requests.RequestException:
