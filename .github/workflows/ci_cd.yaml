@@ -4,7 +4,6 @@ on:
   pull_request:
     branches: 
       - main
-  # Habilita botão na interface Web para acionar manualmente a pipeline
   workflow_dispatch:
 
 jobs:
@@ -12,7 +11,6 @@ jobs:
     name: 'Integração'
     runs-on: ubuntu-latest
     steps:
-      # Equivalente a git clone
       - uses: actions/checkout@v4
       - name: 'Instalação de dependências'
         run: pip install -r requirements.txt
@@ -23,7 +21,8 @@ jobs:
       - name: 'Análise estática'
         run: bandit -r app/
       - name: 'Linting'
-        run: pylint app/ || true
+        run: pylint app/
+
   entrega:
     needs: integracao
     name: 'Entrega'
@@ -43,7 +42,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/curso-devops:latest
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/curso-devops:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/curso-devops:${{ github.sha }}
+
   implantacao:
     runs-on: self-hosted
     needs: entrega
@@ -51,4 +53,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 'Aplicação do manifesto'
-        run: kubectl delete -f deployment.yaml && kubectl apply -f deployment.yaml
+        run: kubectl apply -f deployment.yaml
+      - name: 'Verificação do rollout'
+        run: kubectl rollout status deployment deploy-devops
