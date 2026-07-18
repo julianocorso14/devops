@@ -76,7 +76,8 @@ def health():
     return {"status": "OK"}
 
 
-@APP.get("/tarefas", summary="Listar tarefas", description="Lista todas as tarefas cadastradas", tags=["Tarefas"])
+@APP.get("/tarefas", summary="Listar tarefas", description="Lista todas as tarefas cadastradas",
+ tags=["Tarefas"])
 def listar_tarefas():
     """Lista todas as tarefas cadastradas (somente id e título)."""
     if not LISTA_TAREFAS:
@@ -85,7 +86,8 @@ def listar_tarefas():
     return [{"id": tarefa["id"], "titulo": tarefa["titulo"]} for tarefa in LISTA_TAREFAS]
 
 
-@APP.get("/tarefas/{tarefa_id}", summary="Listar tarefa específica", description="Lista uma tarefa pelo ID", tags=["Tarefas"])
+@APP.get("/tarefas/{tarefa_id}", summary="Listar tarefa específica", 
+description="Lista uma tarefa pelo ID", tags=["Tarefas"])
 def listar_tarefa_especifica(tarefa_id: int):
     """Lista uma tarefa específica pelo ID."""
     mensagem_padrao = {"mensagem": "Não existe nenhuma tarefa"}
@@ -95,7 +97,8 @@ def listar_tarefa_especifica(tarefa_id: int):
     return LISTA_TAREFAS[tarefa_id]
 
 
-@APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa", tags=["Tarefas"], status_code=201)
+@APP.post("/tarefas", summary="Inserir tarefa", description="Insere uma nova tarefa", 
+tags=["Tarefas"], status_code=201)
 def inserir_tarefa(tarefa: Tarefa):
     """Insere uma nova tarefa na lista."""
     global QTD_TAREFAS, QTD_TAREFAS_PENDENTES
@@ -107,7 +110,8 @@ def inserir_tarefa(tarefa: Tarefa):
     return {"mensagem": "OK"}
 
 
-@APP.put("/tarefas/{tarefa_id}", summary="Atualizar tarefa", description="Atualiza uma tarefa pelo ID", tags=["Tarefas"])
+@APP.put("/tarefas/{tarefa_id}", summary="Atualizar tarefa", 
+description="Atualiza uma tarefa pelo ID", tags=["Tarefas"])
 def atualizar_tarefa(tarefa_id: int, tarefa: Tarefa):
     """Atualiza uma tarefa existente."""
     global QTD_TAREFAS_CONCLUIDA, QTD_TAREFAS_PENDENTES, QTD_TAREFAS_ATUALIZADAS
@@ -126,7 +130,8 @@ def atualizar_tarefa(tarefa_id: int, tarefa: Tarefa):
         QTD_TAREFAS_PENDENTES -= 1
         try:
             requests.post(
-                f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&data_finalizacao={datetime.now()}",
+                f"http://notificacoes:8000/notificar?titulo={tarefa.titulo}&
+                data_finalizacao={datetime.now()}",
                 timeout=5
             )
         except requests.RequestException:
@@ -135,7 +140,8 @@ def atualizar_tarefa(tarefa_id: int, tarefa: Tarefa):
     return {"mensagem": "OK"}
 
 
-@APP.delete("/tarefas/{tarefa_id}", summary="Deletar tarefa", description="Deleta uma tarefa pelo ID", tags=["Tarefas"])
+@APP.delete("/tarefas/{tarefa_id}", summary="Deletar tarefa", 
+description="Deleta uma tarefa pelo ID", tags=["Tarefas"])
 def deletar_tarefa(tarefa_id: int):
     """Remove uma tarefa da lista."""
     global QTD_TAREFAS_REMOVIDAS, QTD_TAREFAS_PENDENTES
@@ -149,7 +155,8 @@ def deletar_tarefa(tarefa_id: int):
     return {"mensagem": "OK"}
 
 
-@APP.get("/metricas", summary="Metricas", description="Retorna métricas de tarefas", tags=["Tarefas"], response_model=Metricas)
+@APP.get("/metricas", summary="Metricas", description="Retorna métricas de tarefas", 
+tags=["Tarefas"], response_model=Metricas)
 def metricas():
     """Retorna métricas das tarefas cadastradas."""
     tempo_medio_total = 0
