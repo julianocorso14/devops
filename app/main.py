@@ -23,7 +23,19 @@ class Tarefa(BaseModel):
     descricao: str
     concluido: bool = False
 
+class Metricas(BaseModel):
+    qtd_tarefas: int
+    qtd_tarefas_pendentes: int
+    qtd_tarefas_concluida: int
+    qtd_tarefas_atualizadas: int
+    qtd_tarefas_removidas: int
+
 LISTA_TAREFAS = []
+qtd_tarefas: int
+qtd_tarefas_pendentes: int
+qtd_tarefas_concluida: int
+qtd_tarefas_atualizadas: int
+qtd_tarefas_removidas: int
 APP = FastAPI()
 
 def nova_tarefa(id: int, titulo: str, descricao: str):
@@ -120,3 +132,7 @@ def deletar_tarefa(id: int):
     LISTA_TAREFAS.pop(id)
     LOGGER.info("Tarefa deletada com sucesso")
     return mensagem_padrao
+
+@APP.get('/metricas', response_model=Tarefa)
+def metricas():
+    pass
